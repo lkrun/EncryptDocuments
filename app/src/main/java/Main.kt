@@ -1,9 +1,20 @@
-import encryption.file.FileManage
-import kotlin.math.abs
+import encryption.args.Args
+import encryption.terminal.FileEncryptionDecryption
+import java.io.File
 
 fun main(args: Array<String>) {
 
-    val fileManage = FileManage()
-    fileManage.init()
+if (args.isNotEmpty()){
+   Args.init(args)
+}
+
+   // val fileManage = FileManage()
+   // fileManage.init()
+
+if (args.isNotEmpty()){
+    FileEncryptionDecryption(args)
+}
+
+
 }
 

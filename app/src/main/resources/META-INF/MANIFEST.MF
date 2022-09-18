@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Main-Class: MainKt
+Class-Path: kotlin-stdlib-jdk7-1.6.10.jar opentest4j-1.2.0.jar junit-pla
+ tform-commons-1.7.2.jar junit-jupiter-api-5.7.2.jar kotlin-stdlib-jdk8-
+ 1.6.10.jar kotlin-stdlib-1.6.10.jar apiguardian-api-1.1.0.jar kotlin-st
+ dlib-common-1.6.10.jar annotations-13.0.jar
+

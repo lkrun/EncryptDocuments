@@ -1,0 +1,7 @@
+Manifest-Version: 1.0
+Main-Class: 
+Class-Path: kotlin-stdlib-jdk8-1.6.10.jar apiguardian-api-1.1.0.jar kotl
+ in-stdlib-1.6.10.jar opentest4j-1.2.0.jar junit-platform-commons-1.7.2.
+ jar kotlin-stdlib-common-1.6.10.jar junit-jupiter-api-5.7.2.jar annotat
+ ions-13.0.jar kotlin-stdlib-jdk7-1.6.10.jar
+
