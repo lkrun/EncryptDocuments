@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'application'
+}
+
+group 'com.compose.test'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'
+    annotationProcessor 'org.junit.jupiter:junit-jupiter-engine:5.7.2'
+  //  project(':JJM')
+   implementation(project(":JJM"))
+}
+
+test {
+    useJUnitPlatform()
+}
+
+application {
+    mainClassName = 'MainKt'
+}
