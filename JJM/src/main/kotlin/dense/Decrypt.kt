@@ -21,11 +21,18 @@ class Decrypt {
         newReadAllBytes = ByteArray(readAllBytes.size)
         for ((i, byte) in readAllBytes.withIndex()) {
             this.i = i
-            if (byte >= 0) { //整数
-                decryptInteger(byte)
-            } else { //负数
-                decryptNegative(byte)
+
+            if (byte.toInt() != -128 && integerAsNegative2(byte) != -128) {
+                if (byte >= 0) { //整数
+                    decryptInteger(byte)
+                } else { //负数
+                    decryptNegative(byte)
+                }
+            } else {
+                newReadAllBytes[i] = byte
             }
+
+
 
             a++
             if (a == key.size) {
@@ -43,10 +50,11 @@ class Decrypt {
     private fun decryptInteger(byte: Byte) {
 
         var k = byte - key[a]
-
+        println(k)
         if (k >= 0) {
             k -= 127
         }
+        println(k)
         negativeAsInteger(k.toByte())
     }
 
@@ -87,9 +95,35 @@ class Decrypt {
 
         val k = (byte + 128).toByte()//整数
         val inv = (k - 1).inv().toByte()
-
+        println(k)
+        println(inv)
         newReadAllBytes[i] = inv
     }
 
 
+    private fun integerAsNegative2(byte: Byte): Int {
+        val inv = (byte - 1).inv().toByte()//负数
+
+        println(inv)
+        val i = (inv + 127).toByte() //整数
+
+        println(i)
+        return integerEncryption2(i)
+    }
+
+    /**
+     * Integer encryption
+     *
+     * @param byte 整数
+     */
+    private fun integerEncryption2(byte: Byte): Int {
+        var k = byte - key[a] // 负数 可能整数
+        println(k)
+        if (k >= 0) {
+            k -= 128
+        }
+
+        println("k  $k")
+        return k
+    }
 }

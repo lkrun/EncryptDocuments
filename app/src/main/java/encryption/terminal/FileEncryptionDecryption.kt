@@ -1,15 +1,25 @@
 package encryption.terminal
 
-import dense.JJM
+import encryption.args.Args
+import encryption.xor.XOREncryptionFIle
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
 
 class FileEncryptionDecryption(private val args: Array<String>) {
 
 
     init {
-        getFile()
+
+        if (args.isNotEmpty()) {
+            Args.init(args)
+        }
+
+        // val fileManage = FileManage()
+        // fileManage.init()
+
+        if (args.isNotEmpty()) {
+            getFile()
+        }
+
     }
 
 
@@ -20,13 +30,14 @@ class FileEncryptionDecryption(private val args: Array<String>) {
         val listFiles = file.listFiles()
 
         listFiles?.forEach {
-
+            if (it.name == "jjm.jar") return@forEach
             if (!it.isDirectory) {//不是目录
                 isEncryption(it)
             }
 
         }
 
+        println("完成")
     }
 
     private fun isEncryption(file: File) {
@@ -41,38 +52,44 @@ class FileEncryptionDecryption(private val args: Array<String>) {
 
     private fun encryption(file: File) {
 
-        val fileInputStream = FileInputStream(file)
-        val readAllBytes = fileInputStream.readAllBytes()
+        println("正在 加密 ${file.name}")
 
-        JJM.encryption.setPassword(args[1]).encryptionReadAllBytes(readAllBytes)
         val fileOu = File("./JJM")
         if (!fileOu.isDirectory) {
             fileOu.mkdirs()
         }
-        val fileOu2 = File("./JJM/${file.name}")
-        val fileOutputStream = FileOutputStream(fileOu2)
-        fileOutputStream.write(JJM.encryption.newReadAllBytes)
 
-        fileOutputStream.close()
-        fileInputStream.close()
+        val fileOutput = File("./JJM/${file.name}")
+
+
+        val xorEncryptionFIle = XOREncryptionFIle()
+
+
+        if (args.size==2) {
+            xorEncryptionFIle.setPassword(args[1])
+        }
+        xorEncryptionFIle.encrypt(file, fileOutput)
+
+        println("正在 加密完成 ${file.name}")
     }
 
     private fun decryption(file: File) {
 
-        val fileInputStream = FileInputStream(file)
-        val readAllBytes = fileInputStream.readAllBytes()
-
-        JJM.decrypt.setPassword(args[1]).decryptReadAllBytes(readAllBytes)
+        println("正在 解密 ${file.name}")
         val fileOu = File("./JJM")
         if (!fileOu.isDirectory) {
             fileOu.mkdirs()
         }
-        val fileOu2 = File("./JJM/${file.name}")
-        val fileOutputStream = FileOutputStream(fileOu2)
-        fileOutputStream.write(JJM.decrypt.newReadAllBytes)
 
-        fileOutputStream.close()
-        fileInputStream.close()
+        val fileOutput = File("./JJM/${file.name}")
 
+        val xorEncryptionFIle = XOREncryptionFIle()
+
+        if (args.size==2) {
+            xorEncryptionFIle.setPassword(args[1])
+        }
+        xorEncryptionFIle.decrypt(file, fileOutput)
+
+        println("正在 解密完成 ${file.name}")
     }
 }
