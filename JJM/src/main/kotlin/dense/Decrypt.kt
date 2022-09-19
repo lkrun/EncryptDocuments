@@ -5,14 +5,25 @@ import kotlin.math.abs
 class Decrypt {
 
 
-    private lateinit var key: ByteArray
-
+    private var key: ByteArray
+    init {
+        key= byteArrayOf(1,2,2,2,2,2,2)
+    }
     lateinit var newReadAllBytes: ByteArray
     private var a = 0
     private var i = 0
 
     fun setPassword(password: String): Decrypt {
-        key = password.toByteArray()
+
+        val list = ArrayList<Byte>()
+        password.toByteArray().forEach {
+
+            it.toString().forEach { c ->
+                list.add(c.toString().toInt().toByte())
+            }
+        }
+
+        key = list.toByteArray()
         return this
     }
 
@@ -21,55 +32,14 @@ class Decrypt {
         newReadAllBytes = ByteArray(readAllBytes.size)
         for ((i, byte) in readAllBytes.withIndex()) {
             this.i = i
-
-            if (byte.toInt() != -128 && integerAsNegative2(byte) != -128) {
-                if (byte >= 0) { //整数
-                    decryptInteger(byte)
-                } else { //负数
-                    decryptNegative(byte)
-                }
-            } else {
-                newReadAllBytes[i] = byte
+            if (byte >= 0) { //整数
+                integerAsNegative(byte)
+            } else { //负数
+                negativeAsInteger(byte)
             }
 
-
-
-            a++
-            if (a == key.size) {
-                a = 0
-            }
         }
         key.clone()
-    }
-
-    /**
-     * Decrypt integer
-     *
-     * @param byte 整数
-     */
-    private fun decryptInteger(byte: Byte) {
-
-        var k = byte - key[a]
-        println(k)
-        if (k >= 0) {
-            k -= 127
-        }
-        println(k)
-        negativeAsInteger(k.toByte())
-    }
-
-    /**
-     * Decrypt negative
-     *
-     * @param byte 负数
-     */
-    private fun decryptNegative(byte: Byte) {
-        var k = byte + key[a] //整数  可能负数
-
-        if (k < 0) {
-            k += 128
-        }
-        integerAsNegative(k.toByte())
     }
 
     /**
@@ -79,11 +49,9 @@ class Decrypt {
      */
     private fun integerAsNegative(byte: Byte) {
 
-        val k = (byte - 127).toByte()//负数
+        val inv = (byte - 1).inv().toByte()
 
-        val abs = abs(k.toInt()).toByte()  //整数
-
-        newReadAllBytes[i] = abs
+        newReadAllBytes[i] = inv
     }
 
     /**
@@ -93,37 +61,10 @@ class Decrypt {
      */
     private fun negativeAsInteger(byte: Byte) {
 
-        val k = (byte + 128).toByte()//整数
-        val inv = (k - 1).inv().toByte()
-        println(k)
-        println(inv)
-        newReadAllBytes[i] = inv
+        val abs = abs(byte.toInt()).toByte()  //整数
+
+        newReadAllBytes[i] = abs
     }
 
 
-    private fun integerAsNegative2(byte: Byte): Int {
-        val inv = (byte - 1).inv().toByte()//负数
-
-        println(inv)
-        val i = (inv + 127).toByte() //整数
-
-        println(i)
-        return integerEncryption2(i)
-    }
-
-    /**
-     * Integer encryption
-     *
-     * @param byte 整数
-     */
-    private fun integerEncryption2(byte: Byte): Int {
-        var k = byte - key[a] // 负数 可能整数
-        println(k)
-        if (k >= 0) {
-            k -= 128
-        }
-
-        println("k  $k")
-        return k
-    }
 }

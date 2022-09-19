@@ -10,12 +10,15 @@ object Args {
             println(
                 " 第一个参数\n" +
                         " help 帮助 " +
-                        " -a  加密 \n" +
-                        " -a-eds \n" +
-                        " -b  解密\n" +
-                        " -b-eds \n" +
+                        " -e  加密 \n" +
+                        " -e-eds \n" +
+                        " -d  解密\n" +
+                        " -d-eds \n" +
                         "第二个参数\n" +
-                        "密码 \n"
+                        "密码 \n" +
+                        "批量重命名 java -jar jjm.jar r 20220918- mp4\n" +
+                        "加密 java -jar jjm.jar -e-jjm 格式 替换格式\n"+
+                        "解密 java -jar jjm.jar -d-jjm 格式 替换格式\n"
             )
         }
 
