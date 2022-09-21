@@ -1,13 +1,93 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm'
     id 'java-library'
+    id 'maven-publish'
+   // id 'signing'
+}
+group 'JJM'
+version '1.4'
+
+
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = groupid
+            artifactId = group
+            version = version
+           // artifact sourceJar
+           // artifact source: sourceJar, classifier: 'src', extension: 'zip'
+
+         artifact 'build/libs/JJM-1.2.jar' // 发布在构建之外创建的文件
+  /*             //  from components.java
+            artifact(sourceJar) {
+                // These values will be used instead of the values from the task. The task values will not be updated.
+                classifier "src"
+                extension "zip"
+            }
+            artifact("my-docs-file.htm") {
+                classifier "documentation"
+                extension "html"
+            }*/
+
+            pom {
+                name = "jjm"
+                description = "load csv file for Mycat"
+                url = "https://github.com/liangke21/EncryptDocuments"
+                licenses {
+                    license {
+                        name = "The Apache License, Version 2.0"
+                        url = "http://www.apache.org/licenses/LICENSE-2.0.txt"
+                    }
+                }
+                developers {
+                    // 添加开发者描述，这个id不知道是什么
+                    developer {
+                        id = "1396797522"
+                        name = "laingke"
+                        email = "1396797522@qq.com"
+                    }
+                }
+                // 添加你的 git 仓库 信息
+                scm {
+                    connection = "https://github.com/liangke21/EncryptDocuments.git"
+                    developerConnection = "https://github.com/liangke21/EncryptDocuments.git"
+                    url = "https://github.com/liangke21/EncryptDocuments"
+                }
+
+
+            }
+        }
+    }
+    repositories {
+/*        maven {
+            url "https://s01.oss.sonatype.org/content/repositories/releases/"
+            credentials {
+                username = spaceUsername
+                password = spacePassword
+            }
+        }*/
+
+        maven {
+            url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = spaceUsername
+                password = spacePassword
+            }
+        }
+/*        maven {
+            url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+            credentials {
+                username = spaceUsername
+                password = spacePassword
+            }
+        }*/
+    }
+
 }
 
 
 
-
-group 'com.file.jjm'
-version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
