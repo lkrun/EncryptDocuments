@@ -5,7 +5,7 @@ plugins {
     id 'signing'
 }
 group 'jjm'
-version '1.0'
+version '1.4'
 
 java {
     withJavadocJar()
@@ -24,7 +24,7 @@ publishing {
     publications {
         mavenJava(MavenPublication) {
             groupId = groupid
-            artifactId = group
+           artifactId = group
             version = version
 
             from components.java
@@ -59,8 +59,8 @@ publishing {
     }
     repositories {
         maven {
-            def releasesRepoUrl = layout.buildDirectory.dir('https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/')
-            def snapshotsRepoUrl = layout.buildDirectory.dir('https://s01.oss.sonatype.org/content/repositories/snapshots/')
+            def releasesRepoUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+            def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
             credentials {
                 username = spaceUsername
