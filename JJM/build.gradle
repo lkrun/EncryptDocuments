@@ -2,37 +2,35 @@ plugins {
     id 'org.jetbrains.kotlin.jvm'
     id 'java-library'
     id 'maven-publish'
-   // id 'signing'
+    id 'signing'
 }
-group 'JJM'
-version '1.4'
+group 'jjm'
+version '1.0'
 
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+javadoc {
+    options{
+        encoding "UTF-8"
+        charSet 'UTF-8'
+    }
+}
 
 
 publishing {
     publications {
-        maven(MavenPublication) {
+        mavenJava(MavenPublication) {
             groupId = groupid
             artifactId = group
             version = version
-           // artifact sourceJar
-           // artifact source: sourceJar, classifier: 'src', extension: 'zip'
 
-         artifact 'build/libs/JJM-1.2.jar' // 发布在构建之外创建的文件
-  /*             //  from components.java
-            artifact(sourceJar) {
-                // These values will be used instead of the values from the task. The task values will not be updated.
-                classifier "src"
-                extension "zip"
-            }
-            artifact("my-docs-file.htm") {
-                classifier "documentation"
-                extension "html"
-            }*/
-
+            from components.java
             pom {
                 name = "jjm"
-                description = "load csv file for Mycat"
+                description = "文件加密工具"
                 url = "https://github.com/liangke21/EncryptDocuments"
                 licenses {
                     license {
@@ -44,7 +42,7 @@ publishing {
                     // 添加开发者描述，这个id不知道是什么
                     developer {
                         id = "1396797522"
-                        name = "laingke"
+                        name = "liangke"
                         email = "1396797522@qq.com"
                     }
                 }
@@ -60,38 +58,33 @@ publishing {
         }
     }
     repositories {
-/*        maven {
-            url "https://s01.oss.sonatype.org/content/repositories/releases/"
-            credentials {
-                username = spaceUsername
-                password = spacePassword
-            }
-        }*/
-
         maven {
-            url "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+            def releasesRepoUrl = layout.buildDirectory.dir('https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/')
+            def snapshotsRepoUrl = layout.buildDirectory.dir('https://s01.oss.sonatype.org/content/repositories/snapshots/')
+            url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
             credentials {
                 username = spaceUsername
                 password = spacePassword
             }
         }
-/*        maven {
-            url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
-            credentials {
-                username = spaceUsername
-                password = spacePassword
-            }
-        }*/
     }
 
 }
 
-
-
-
-repositories {
-    mavenCentral()
+signing {
+   sign publishing.publications.mavenJava
+   // sign configurations.archives
 }
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+/*repositories {
+    mavenCentral()
+}*/
+
 
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.2'

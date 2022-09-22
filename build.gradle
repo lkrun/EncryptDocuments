@@ -2,7 +2,20 @@ plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.10'
     //id 'application'
     //id 'maven-publish'
+
 }
+
+
+/*
+
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
+*/
+
+
 
 /*
 group = 'com.compose.test'
