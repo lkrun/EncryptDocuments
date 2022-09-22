@@ -21,6 +21,8 @@ class FileEncryption {
 
     lateinit var transformation: String
 
+    var mode: Int = 0
+
     lateinit var inputFile: File
     lateinit var outputFile: File
     fun setKey(k: ByteArray) {
@@ -46,18 +48,15 @@ class FileEncryption {
         val fileOutputStream = FileOutputStream(output)
 
         val available = fileInputStream.available()
-        println(available)
+
         val i = available / 100
 
         var k = i
         var z = 0
-
+        var dataOfFile: Int
         progressMonitor?.progressMonitorStream(0)
         if (progressMonitor != null) {
-
-            var dataOfFile: Int
             while (cipherInputStream.read().also { dataOfFile = it } > -1) {
-                // println(dataOfFile)
                 z++
                 if (z > k) {
                     k = z + i
@@ -65,7 +64,6 @@ class FileEncryption {
                     progressMonitor?.progressMonitorStream(progress)
                 }
                 fileOutputStream.write(dataOfFile)
-
             }
 
         } else {
@@ -88,17 +86,22 @@ class FileEncryption {
         val fileOutputStream = FileOutputStream(output)
         val cipherOutputStream = CipherOutputStream(fileOutputStream, cipher)
 
+        val available = fileInputStream.available()
 
-        val counter = 0
+        val i = available / 100
+
+        var k = i
+        var z = 0
+        var dataOfFile: Int
         if (progressMonitor != null) {
-            val progressMonitorInputStream = ProgressMonitorInputStream(null, "dddddddd", fileInputStream)
+            while (fileInputStream.read().also { dataOfFile = it } > -1) {
 
-            val p = progressMonitorInputStream.progressMonitor
-
-            var dataOfFile: Int
-            while (progressMonitorInputStream.read().also { dataOfFile = it } > -1) {
-
-                progressMonitor?.progressMonitorStream(p.toString())
+                z++
+                if (z > k) {
+                    k = z + i
+                    val progress = k / i
+                    progressMonitor?.progressMonitorStream(progress)
+                }
 
                 cipherOutputStream.write(dataOfFile)
 
@@ -114,7 +117,7 @@ class FileEncryption {
     }
 
 
-    fun commit(mode: Int) {
+    fun commit() {
         when (mode) {
 
             ENCRYPT_MODE -> encrypt(inputFile, outputFile)

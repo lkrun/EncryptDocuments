@@ -63,8 +63,14 @@ object JJM {
         return this
     }
 
-    fun commit(mode: Int): JJM {
-        fileEncryption.commit(mode)
+    fun setMode(mode: Int): JJM {
+        fileEncryption.mode = mode
+        return this
+    }
+
+
+    fun commit(): JJM {
+        fileEncryption.commit()
         return this
     }
 
