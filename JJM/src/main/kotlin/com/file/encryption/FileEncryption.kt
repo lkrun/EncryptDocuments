@@ -11,7 +11,6 @@ import javax.crypto.CipherInputStream
 import javax.crypto.CipherOutputStream
 import javax.crypto.SecretKey
 import javax.crypto.spec.SecretKeySpec
-import javax.swing.ProgressMonitorInputStream
 
 class FileEncryption {
 
@@ -24,9 +23,19 @@ class FileEncryption {
 
     var mode: Int = 0
 
+    var mDecrypt: Int = 0
+
+
+    lateinit var inputStream: InputStream
+
+    lateinit var fileInputStream: FileInputStream
+    lateinit var fileOutputStream: FileOutputStream
+
     lateinit var inputFile: File
-    lateinit var fileInputStream: InputStream
     lateinit var outputFile: File
+
+
+    lateinit var readAllBytes: ByteArray
     fun setKey(k: ByteArray) {
         key = k
     }
@@ -79,13 +88,13 @@ class FileEncryption {
     }
 
 
-    private fun encrypt(fileInputStream: InputStream, outputFile: File) {
+    private fun encrypt(fileInputStream: FileInputStream, fileOutputStream: FileOutputStream) {
         val desk: SecretKey = SecretKeySpec(key, algorithm)
         val cipher = Cipher.getInstance(transformation)
         cipher.init(Cipher.ENCRYPT_MODE, desk)
 
         val cipherInputStream = CipherInputStream(fileInputStream, cipher)
-        val fileOutputStream = FileOutputStream(outputFile)
+        // val fileOutputStream = FileOutputStream(outputFile)
         fileOutputStream.write(cipherInputStream.readAllBytes())
         fileOutputStream.close()
         cipherInputStream.close()
@@ -134,12 +143,11 @@ class FileEncryption {
     }
 
 
-    private fun decrypt(fileInputStream: InputStream, outputFile: File) {
+    private fun decrypt(fileInputStream: FileInputStream, fileOutputStream: FileOutputStream) {
         val desk: SecretKey = SecretKeySpec(key, algorithm)
         val cipher = Cipher.getInstance(transformation)
         cipher.init(Cipher.DECRYPT_MODE, desk)
 
-        val fileOutputStream = FileOutputStream(outputFile)
         val cipherOutputStream = CipherOutputStream(fileOutputStream, cipher)
         cipherOutputStream.write(fileInputStream.readAllBytes())
         cipherOutputStream.close()
@@ -148,7 +156,20 @@ class FileEncryption {
     }
 
 
-   private fun decrypt(readAllBytes: ByteArray, outputFile: File) {
+    private fun decrypt(fileInputStream: InputStream, fileOutputStream: FileOutputStream) {
+        val desk: SecretKey = SecretKeySpec(key, algorithm)
+        val cipher = Cipher.getInstance(transformation)
+        cipher.init(Cipher.DECRYPT_MODE, desk)
+
+        val cipherOutputStream = CipherOutputStream(fileOutputStream, cipher)
+        cipherOutputStream.write(fileInputStream.readAllBytes())
+        cipherOutputStream.close()
+        fileOutputStream.close()
+        fileInputStream.close()
+    }
+
+
+    private fun decrypt(readAllBytes: ByteArray, outputFile: File) {
         val desk: SecretKey = SecretKeySpec(key, algorithm)
         val cipher = Cipher.getInstance(transformation)
         cipher.init(Cipher.DECRYPT_MODE, desk)
@@ -163,10 +184,21 @@ class FileEncryption {
     fun commit() {
         when (mode) {
 
-            ENCRYPT_MODE -> encrypt(fileInputStream, outputFile)
+            ENCRYPT_MODE -> encrypt(fileInputStream, fileOutputStream)
 
-            DECRYPT_MODE -> decrypt(fileInputStream, outputFile)
+            DECRYPT_MODE -> decrypt()
+
         }
+    }
+
+    private fun decrypt() {
+
+        when (mDecrypt) {
+            0 -> decrypt(inputFile, outputFile)
+            1 -> decrypt(fileInputStream, fileOutputStream)
+            2 -> decrypt(inputStream, fileOutputStream)
+        }
+
     }
 
     private var progressMonitor: OnProgressMonitor? = null

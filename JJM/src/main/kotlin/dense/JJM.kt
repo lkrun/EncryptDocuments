@@ -3,9 +3,7 @@ package dense
 import com.file.encryption.FileEncryption
 import com.file.encryption.enum.Algorithm
 import com.file.encryption.enum.Transformation
-import java.io.File
-import java.io.FileInputStream
-import java.io.InputStream
+import java.io.*
 
 object JJM {
     /**
@@ -72,16 +70,33 @@ object JJM {
         fileEncryption.inputFile = inputFile
         fileEncryption.outputFile = outputFile
 
-        setPath(FileInputStream(inputFile), outputFile)
+        setPath(FileInputStream(inputFile), FileOutputStream(outputFile))
         return this
     }
 
-    fun setPath(fileInputStream: InputStream, outputFile: File) {
+    fun setPath(inputStream: FileInputStream, outputStream: FileOutputStream): JJM {
+        fileEncryption.mDecrypt = 1
+        fileEncryption.fileInputStream = inputStream
+        fileEncryption.fileOutputStream = outputStream
 
-        fileEncryption.fileInputStream = fileInputStream
-        fileEncryption.outputFile = outputFile
+        return this
+    }
+
+    fun setPath(inputStream: InputStream, outputStream: FileOutputStream): JJM {
+        fileEncryption.mDecrypt = 2
+        fileEncryption.inputStream = inputStream
+        fileEncryption.fileOutputStream = outputStream
+
+        return this
+    }
 
 
+    fun setPath(readAllBytes: ByteArray, outputStream: FileOutputStream): JJM {
+        fileEncryption.mDecrypt = 3
+        fileEncryption.readAllBytes=readAllBytes
+        fileEncryption.fileOutputStream = outputStream
+
+        return this
     }
 
     fun setMode(mode: Int): JJM {
