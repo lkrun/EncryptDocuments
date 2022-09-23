@@ -4,10 +4,20 @@ import com.file.encryption.FileEncryption
 import com.file.encryption.enum.Algorithm
 import com.file.encryption.enum.Transformation
 import java.io.File
+import java.io.FileInputStream
+import java.io.InputStream
 
 object JJM {
-
+    /**
+     * Encrypt Mode
+     * 加密
+     */
     const val ENCRYPT_MODE = 1
+
+    /**
+     * Decrypt Mode
+     * 解密
+     */
     const val DECRYPT_MODE = 2
     val decrypt = Decrypt()
 
@@ -57,10 +67,21 @@ object JJM {
         return this
     }
 
+
     fun setPath(inputFile: File, outputFile: File): JJM {
         fileEncryption.inputFile = inputFile
         fileEncryption.outputFile = outputFile
+
+        setPath(FileInputStream(inputFile), outputFile)
         return this
+    }
+
+    fun setPath(fileInputStream: InputStream, outputFile: File) {
+
+        fileEncryption.fileInputStream = fileInputStream
+        fileEncryption.outputFile = outputFile
+
+
     }
 
     fun setMode(mode: Int): JJM {

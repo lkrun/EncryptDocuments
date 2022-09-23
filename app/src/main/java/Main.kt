@@ -10,19 +10,19 @@ fun main(args: Array<String>) {
 
 
 
-/*
-    JJM.setKey("12345678")
+    val str=""
+
+
+/*    JJM.setKey(str.substring(0,8))
         .setAlgorithm(Algorithm.EDS)
         .setTransformation(Transformation.EDSECBPKCS5Padding)
-        .setPath("./db/11.jpg", "./db/22.jpg")
-        .setOnProgressMonitor {
-            println(it)
-        }
+        .setPath("./db/acb.db", "./db/acbEDS2.db")
+       // .setOnProgressMonitor { println(it) }
         .setMode(JJM.ENCRYPT_MODE)
-        .commit()
+        .commit()*/
 
 
-    JJM.setKey("12345678")
+ /*   JJM.setKey("12345678")
         .setAlgorithm(Algorithm.EDS)
         .setTransformation(Transformation.EDSECBPKCS5Padding)
         .setPath("./db/22.jpg", "./db/223.jpg")

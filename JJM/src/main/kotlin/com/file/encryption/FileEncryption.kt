@@ -5,6 +5,7 @@ import dense.JJM.ENCRYPT_MODE
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
+import java.io.InputStream
 import javax.crypto.Cipher
 import javax.crypto.CipherInputStream
 import javax.crypto.CipherOutputStream
@@ -24,6 +25,7 @@ class FileEncryption {
     var mode: Int = 0
 
     lateinit var inputFile: File
+    lateinit var fileInputStream: InputStream
     lateinit var outputFile: File
     fun setKey(k: ByteArray) {
         key = k
@@ -76,6 +78,21 @@ class FileEncryption {
         fileInputStream.close()
     }
 
+
+    private fun encrypt(fileInputStream: InputStream, outputFile: File) {
+        val desk: SecretKey = SecretKeySpec(key, algorithm)
+        val cipher = Cipher.getInstance(transformation)
+        cipher.init(Cipher.ENCRYPT_MODE, desk)
+
+        val cipherInputStream = CipherInputStream(fileInputStream, cipher)
+        val fileOutputStream = FileOutputStream(outputFile)
+        fileOutputStream.write(cipherInputStream.readAllBytes())
+        fileOutputStream.close()
+        cipherInputStream.close()
+        fileInputStream.close()
+    }
+
+
     private fun decrypt(npuFile: File, output: File) {
         val desk: SecretKey = SecretKeySpec(key, algorithm)
         val cipher = Cipher.getInstance(transformation)
@@ -117,12 +134,38 @@ class FileEncryption {
     }
 
 
+    private fun decrypt(fileInputStream: InputStream, outputFile: File) {
+        val desk: SecretKey = SecretKeySpec(key, algorithm)
+        val cipher = Cipher.getInstance(transformation)
+        cipher.init(Cipher.DECRYPT_MODE, desk)
+
+        val fileOutputStream = FileOutputStream(outputFile)
+        val cipherOutputStream = CipherOutputStream(fileOutputStream, cipher)
+        cipherOutputStream.write(fileInputStream.readAllBytes())
+        cipherOutputStream.close()
+        fileOutputStream.close()
+        fileInputStream.close()
+    }
+
+
+   private fun decrypt(readAllBytes: ByteArray, outputFile: File) {
+        val desk: SecretKey = SecretKeySpec(key, algorithm)
+        val cipher = Cipher.getInstance(transformation)
+        cipher.init(Cipher.DECRYPT_MODE, desk)
+        val fileOutputStream = FileOutputStream(outputFile)
+        val cipherOutputStream = CipherOutputStream(fileOutputStream, cipher)
+        cipherOutputStream.write(readAllBytes)
+        cipherOutputStream.close()
+        fileOutputStream.close()
+    }
+
+
     fun commit() {
         when (mode) {
 
-            ENCRYPT_MODE -> encrypt(inputFile, outputFile)
+            ENCRYPT_MODE -> encrypt(fileInputStream, outputFile)
 
-            DECRYPT_MODE -> decrypt(inputFile, outputFile)
+            DECRYPT_MODE -> decrypt(fileInputStream, outputFile)
         }
     }
 
