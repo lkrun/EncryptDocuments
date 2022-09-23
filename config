@@ -1,0 +1,16 @@
+[core]
+	repositoryformatversion = 0
+	filemode = true
+	bare = false
+	logallrefupdates = true
+[remote "origin"]
+	url = https://gitee.com/liangke25/EncryptDocuments.git
+	fetch = +refs/heads/*:refs/remotes/origin/*
+	url = https://git.jetbrains.space/liangke/jingxang/EncryptDocuments.git
+[branch "master"]
+	remote = origin
+	merge = refs/heads/master
+[remote "jetbrains"]
+	url = https://git.jetbrains.space/liangke/jingxang/EncryptDocuments.git
+	fetch = +refs/heads/*:refs/remotes/coding/*
+	tagopt = --no-tags

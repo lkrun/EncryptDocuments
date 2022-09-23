@@ -1,6 +1,6 @@
 package encryption.file
 
-import dense.JJM
+import encryption.dense.JJM
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream

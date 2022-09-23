@@ -1,6 +1,6 @@
-package dense
+package com.file.encryption
 
-import com.file.encryption.FileEncryption
+import com.file.encryption.dense.FileEncryption
 import com.file.encryption.enum.Algorithm
 import com.file.encryption.enum.Transformation
 import java.io.*
@@ -17,9 +17,6 @@ object JJM {
      * 解密
      */
     const val DECRYPT_MODE = 2
-    val decrypt = Decrypt()
-
-    val encryption = Encryption()
 
     private val fileEncryption = FileEncryption()
 

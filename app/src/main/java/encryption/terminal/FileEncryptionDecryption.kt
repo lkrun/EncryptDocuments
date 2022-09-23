@@ -1,13 +1,12 @@
 package encryption.terminal
 
-import dense.JJM
+import encryption.dense.JJM
 import encryption.args.Args
 import encryption.des.EDSFile
 import encryption.xor.XOREncryptionFIle
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.util.*
 
 class FileEncryptionDecryption(private val args: Array<String>) {
 

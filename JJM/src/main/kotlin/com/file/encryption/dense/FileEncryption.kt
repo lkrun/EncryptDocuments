@@ -1,7 +1,7 @@
-package com.file.encryption
+package com.file.encryption.dense
 
-import dense.JJM.DECRYPT_MODE
-import dense.JJM.ENCRYPT_MODE
+import com.file.encryption.JJM.DECRYPT_MODE
+import com.file.encryption.JJM.ENCRYPT_MODE
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream

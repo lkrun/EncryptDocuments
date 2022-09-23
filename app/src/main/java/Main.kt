@@ -1,6 +1,3 @@
-import com.file.encryption.enum.Algorithm
-import com.file.encryption.enum.Transformation
-import dense.JJM
 import encryption.terminal.FileEncryptionDecryption
 
 fun main(args: Array<String>) {
