@@ -47,6 +47,8 @@ class FileEncryption {
      * @param output
      */
     private fun encrypt(npuFile: File, output: File) {
+        println("加密")
+
         val desk: SecretKey = SecretKeySpec(key, algorithm)
         val cipher = Cipher.getInstance(transformation)
         cipher.init(Cipher.ENCRYPT_MODE, desk)
@@ -102,6 +104,18 @@ class FileEncryption {
     }
 
 
+    private fun encrypt(inputStream:InputStream, fileOutputStream: FileOutputStream) {
+        val desk: SecretKey = SecretKeySpec(key, algorithm)
+        val cipher = Cipher.getInstance(transformation)
+        cipher.init(Cipher.ENCRYPT_MODE, desk)
+        val cipherInputStream = CipherInputStream(inputStream, cipher)
+        fileOutputStream.write(cipherInputStream.readAllBytes())
+        fileOutputStream.close()
+        cipherInputStream.close()
+        fileInputStream.close()
+    }
+
+
     private fun decrypt(npuFile: File, output: File) {
         val desk: SecretKey = SecretKeySpec(key, algorithm)
         val cipher = Cipher.getInstance(transformation)
@@ -112,14 +126,17 @@ class FileEncryption {
         val fileOutputStream = FileOutputStream(output)
         val cipherOutputStream = CipherOutputStream(fileOutputStream, cipher)
 
-        val available = fileInputStream.available()
 
-        val i = available / 100
-
-        var k = i
-        var z = 0
-        var dataOfFile: Int
         if (progressMonitor != null) {
+            val available = fileInputStream.available()
+
+            val i = available / 100
+
+            var k = i
+            var z = 0
+            var dataOfFile: Int
+
+
             while (fileInputStream.read().also { dataOfFile = it } > -1) {
 
                 z++
@@ -169,11 +186,10 @@ class FileEncryption {
     }
 
 
-    private fun decrypt(readAllBytes: ByteArray, outputFile: File) {
+    private fun decrypt(readAllBytes: ByteArray,  fileOutputStream: FileOutputStream) {
         val desk: SecretKey = SecretKeySpec(key, algorithm)
         val cipher = Cipher.getInstance(transformation)
         cipher.init(Cipher.DECRYPT_MODE, desk)
-        val fileOutputStream = FileOutputStream(outputFile)
         val cipherOutputStream = CipherOutputStream(fileOutputStream, cipher)
         cipherOutputStream.write(readAllBytes)
         cipherOutputStream.close()
@@ -184,7 +200,7 @@ class FileEncryption {
     fun commit() {
         when (mode) {
 
-            ENCRYPT_MODE -> encrypt(fileInputStream, fileOutputStream)
+            ENCRYPT_MODE -> encrypt()
 
             DECRYPT_MODE -> decrypt()
 
@@ -197,9 +213,22 @@ class FileEncryption {
             0 -> decrypt(inputFile, outputFile)
             1 -> decrypt(fileInputStream, fileOutputStream)
             2 -> decrypt(inputStream, fileOutputStream)
+            3 -> decrypt(readAllBytes, fileOutputStream)
         }
 
     }
+
+
+    private fun encrypt(){
+        when (mDecrypt) {
+            0 ->encrypt(inputFile, outputFile)
+            1 -> encrypt(fileInputStream, fileOutputStream)
+            2 -> encrypt(inputStream, fileOutputStream)
+            3 ->  throw IllegalArgumentException("解密不支持  ByteArray 参数")
+        }
+
+    }
+
 
     private var progressMonitor: OnProgressMonitor? = null
 

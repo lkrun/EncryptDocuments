@@ -30,6 +30,8 @@ object JJM {
 
 
     fun setKey(key: ByteArray): JJM {
+
+
         fileEncryption.setKey(key)
         return this
     }

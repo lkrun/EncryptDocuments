@@ -5,7 +5,7 @@ plugins {
     id 'signing'
 }
 group 'jjm'
-version '3.1'
+version '3.4'
 
 java {
     withJavadocJar()
