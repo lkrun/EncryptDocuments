@@ -1,0 +1,1 @@
+data class EDData(val format: String, val title: String)
